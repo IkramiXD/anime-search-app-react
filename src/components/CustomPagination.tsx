@@ -1,0 +1,97 @@
+import { Box, TablePagination } from "@mui/material";
+import { useAppSelector } from "../hooks/reduxHooks";
+import { useDispatch } from "react-redux";
+import {
+  setSearchLimit,
+  setSearchPage,
+} from "../features/animeList/animeSearchSlice";
+import { useEffect, useState } from "react";
+import useDebounce from "../hooks/useDebounce";
+
+const CustomPagination = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const debouncedPage = useDebounce(currentPage);
+  const debouncedRowsPerPage = useDebounce(rowsPerPage);
+
+  const animePage = useAppSelector((state) => state.animePagination);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSearchPage(debouncedPage + 1));
+  }, [debouncedPage, dispatch]);
+
+  useEffect(() => {
+    dispatch(setSearchLimit(debouncedRowsPerPage));
+  }, [debouncedRowsPerPage, dispatch]);
+
+  const handleChangePage = (_event: any, newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setCurrentPage(0);
+  };
+
+  useEffect(() => {
+    const newPage = animePage.current_page - 1;
+    const newRowsPerPage = animePage.items.per_page;
+    const newTotalItems = animePage.items.total;
+
+    if (
+      currentPage !== newPage ||
+      rowsPerPage !== newRowsPerPage ||
+      totalItems !== newTotalItems
+    ) {
+      setCurrentPage(newPage);
+      setRowsPerPage(newRowsPerPage);
+      setTotalItems(newTotalItems);
+    }
+  }, [animePage]);
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "auto", // allow horizontal scroll if absolutely needed
+        display: "flex",
+        justifyContent: { xs: "center", sm: "flex-end" }, // center on mobile
+      }}
+    >
+      <Box sx={{ minWidth: 0 }}>
+        <TablePagination
+          component="div"
+          count={totalItems}
+          page={currentPage}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          showFirstButton
+          showLastButton
+          rowsPerPageOptions={[5, 10, 15, 20, 25]}
+          sx={{
+            "& .MuiTablePagination-toolbar": {
+              flexWrap: "wrap",
+              justifyContent: "center",
+              padding: "0 2px",
+              alignItems: "baseline",
+            },
+            "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+              {
+                margin: "8px 0px 8px",
+              },
+            "& .MuiTablePagination-actions": {
+              ml: { xs: 0, sm: "20px" },
+              // mb: { xs: 1, sm: "5px" },
+            },
+          }}
+        />
+      </Box>
+    </Box>
+  );
+};
+
+export default CustomPagination;
