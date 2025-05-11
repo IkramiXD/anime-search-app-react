@@ -32,7 +32,7 @@ const CustomPagination = () => {
   }, [debouncedRowsPerPage, dispatch]);
 
   useEffect(() => {
-    const newPage = animePage.current_page - 1; 
+    const newPage = animePage.current_page - 1;
     const newRowsPerPage = animePage.items.per_page;
     const newTotalItems = animePage.items.total;
 
@@ -56,7 +56,7 @@ const CustomPagination = () => {
   ) => {
     const newLimit = parseInt(event.target.value, 10);
     setRowsPerPage(newLimit);
-    setCurrentPage(0); 
+    setCurrentPage(0);
   };
 
   return (
@@ -91,7 +91,7 @@ const CustomPagination = () => {
                 margin: "8px 0px 8px",
               },
             "& .MuiTablePagination-actions": {
-              ml: { xs: 0, sm: "20px" },
+              ml: { xs: "0px !important", sm: "20px !important" },
             },
           }}
         />
