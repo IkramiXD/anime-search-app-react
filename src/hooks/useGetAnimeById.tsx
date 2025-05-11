@@ -22,11 +22,11 @@ const useGetAnimeById = (id: number) => {
           { signal: controller.signal }
         );
         setResults(response.data.data);
+        setLoading(false);
       } catch (error: any) {
         if (axios.isCancel(error)) return;
         console.error("Failed to fetch anime search results:", error);
         setError(error.message);
-      } finally {
         setLoading(false);
       }
     };

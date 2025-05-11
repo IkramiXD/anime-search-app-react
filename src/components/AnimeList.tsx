@@ -19,7 +19,7 @@ const SkeletonLoader = (limit: number) => {
   return (
     <>
       {Array.from({ length: limit }).map((_, index) => (
-        <Card sx={{ width: 225 }} elevation={2}>
+        <Card sx={{ width: 225 }} elevation={2} key={index}>
           <CardActionArea>
             {/* Image Skeleton */}
             <Skeleton variant="rectangular" height={300} />

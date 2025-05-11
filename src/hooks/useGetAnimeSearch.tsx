@@ -14,7 +14,7 @@ export interface AnimeSearchParams {
 }
 
 const useGetAnimeSearch = (
-  params: AnimeSearchParams = {
+  searchParams: AnimeSearchParams = {
     q: "",
     sfw: true,
   }
@@ -24,22 +24,16 @@ const useGetAnimeSearch = (
   const [errorMsg, setErrorMsg] = useState("");
 
   const safeParams = {
-    ...params,
-    limit: params.limit && params.limit <= 25 ? params.limit : 25,
-    page: params.page && params.page > 0 ? params.page : 0,
+    ...searchParams,
+    limit:
+      searchParams.limit && searchParams.limit <= 25 ? searchParams.limit : 25,
+    page: searchParams.page && searchParams.page > 0 ? searchParams.page : 0,
   };
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const controller = new AbortController();
-    if (params.q.trim().length === 0) {
-      console.log("Search query is empty. Aborting fetch.");
-      setResults([]);
-      dispatch(resetAnimePagination());
-      setErrorMsg("Search query is required.");
-      return;
-    }
     const fetchData = async () => {
       setIsLoading(true);
       try {
@@ -50,11 +44,11 @@ const useGetAnimeSearch = (
         });
         setResults(response.data.data);
         dispatch(setAnimePagination(response.data.pagination));
+        setIsLoading(false);
       } catch (error: any) {
         if (axios.isCancel(error)) return;
         console.error("Failed to fetch anime search results:", error);
         setErrorMsg(error?.message || "Failed to fetch anime data.");
-      } finally {
         setIsLoading(false);
       }
     };
@@ -62,7 +56,7 @@ const useGetAnimeSearch = (
     fetchData();
 
     return () => controller.abort();
-  }, [params.q, params.sfw, params.page, params.limit]);
+  }, [searchParams.q, searchParams.sfw, searchParams.page, searchParams.limit]);
 
   return { results, isLoading, errorMsg };
 };

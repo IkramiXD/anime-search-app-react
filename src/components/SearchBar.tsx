@@ -7,7 +7,8 @@ import { store } from "../store";
 import { useDispatch } from "react-redux";
 
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const animeSearch = store.getState().animeSearch;
+  const [searchTerm, setSearchTerm] = useState(animeSearch.q);
   const debounceSearch = useDebounce(searchTerm);
   const dispatch = useDispatch();
 
@@ -23,7 +24,6 @@ const SearchBar = () => {
 
   useEffect(() => {
     dispatch(setSearchQuery(debounceSearch));
-    console.log("Search term updated:", debounceSearch);
   }, [debounceSearch, dispatch]);
 
   return (

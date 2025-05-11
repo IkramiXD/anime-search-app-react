@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Snackbar, Slide, SlideProps } from "@mui/material";
+import { Snackbar, SlideProps, Box, Typography, Slide } from "@mui/material";
 
 const NotiSnackbarContext = createContext<(message: string) => void>(() => {});
 
@@ -21,7 +21,7 @@ export const NotiSnackbarProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const SlideTransition = (props: SlideProps) => {
-    return <Slide {...props} direction="up" />;
+    return <Slide {...props} direction="left" />;
   };
 
   return (
@@ -32,18 +32,24 @@ export const NotiSnackbarProvider = ({ children }: { children: ReactNode }) => {
         open={open}
         onClose={handleClose}
         slots={{ transition: SlideTransition }}
-        message={message}
         autoHideDuration={1200}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        slotProps={{
-          content: {
-            sx: {
-              backgroundColor: "#6200ea",
-              color: "#fff",
-            },
-          },
-        }}
-      />
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Box
+          sx={{
+            mt: 6,
+            bgcolor: "#fff",
+            color: "primary.main",
+            border: "1px solid",
+            borderColor: "primary.main",
+            px: 3,
+            py: 2,
+            borderRadius: 2,
+          }}
+        >
+          <Typography variant="subtitle2">{message}</Typography>
+        </Box>
+      </Snackbar>
     </NotiSnackbarContext.Provider>
   );
 };

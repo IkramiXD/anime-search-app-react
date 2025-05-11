@@ -9,15 +9,19 @@ import { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 
 const CustomPagination = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
+  const dispatch = useDispatch();
+  const animePage = useAppSelector((state) => state.animePagination);
+
+  const [currentPage, setCurrentPage] = useState(
+    () => animePage.current_page - 1
+  );
+  const [rowsPerPage, setRowsPerPage] = useState(
+    () => animePage.items.per_page
+  );
+  const [totalItems, setTotalItems] = useState(() => animePage.items.total);
 
   const debouncedPage = useDebounce(currentPage);
   const debouncedRowsPerPage = useDebounce(rowsPerPage);
-
-  const animePage = useAppSelector((state) => state.animePagination);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setSearchPage(debouncedPage + 1));
@@ -27,17 +31,8 @@ const CustomPagination = () => {
     dispatch(setSearchLimit(debouncedRowsPerPage));
   }, [debouncedRowsPerPage, dispatch]);
 
-  const handleChangePage = (_event: any, newPage: number) => {
-    setCurrentPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: any) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setCurrentPage(0);
-  };
-
   useEffect(() => {
-    const newPage = animePage.current_page - 1;
+    const newPage = animePage.current_page - 1; 
     const newRowsPerPage = animePage.items.per_page;
     const newTotalItems = animePage.items.total;
 
@@ -52,13 +47,25 @@ const CustomPagination = () => {
     }
   }, [animePage]);
 
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newLimit = parseInt(event.target.value, 10);
+    setRowsPerPage(newLimit);
+    setCurrentPage(0); 
+  };
+
   return (
     <Box
       sx={{
         width: "100%",
-        overflowX: "auto", // allow horizontal scroll if absolutely needed
+        overflowX: "auto",
         display: "flex",
-        justifyContent: { xs: "center", sm: "flex-end" }, // center on mobile
+        justifyContent: { xs: "center", sm: "flex-end" },
       }}
     >
       <Box sx={{ minWidth: 0 }}>
@@ -85,7 +92,6 @@ const CustomPagination = () => {
               },
             "& .MuiTablePagination-actions": {
               ml: { xs: 0, sm: "20px" },
-              // mb: { xs: 1, sm: "5px" },
             },
           }}
         />

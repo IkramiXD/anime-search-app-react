@@ -58,7 +58,6 @@ const SkeletonLoader = () => (
                 width: 186,
                 height: 78,
                 borderRadius: 3,
-                // boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.05)",
               }}
             />
           ))}
@@ -101,18 +100,15 @@ const DetailsPage = () => {
   const isFav = favAnime.favorites.some((fav) => fav.id === animeId);
 
   const handleToggleFavorite = () => {
-    console.log("Toggle favorite");
     if (!results) return;
     const { title, images } = results;
     if (isFav) {
       dispatch(removeFavorite(animeId));
-      console.log("Removed from favorites", title);
       notiSnackbar(`${title} removed from favorites`);
     } else {
       dispatch(
         addFavorite({ id: animeId, title, image: images.jpg.image_url })
       );
-      console.log("Added to favorites", title);
       notiSnackbar(`${title} added to favorites`);
     }
   };

@@ -33,7 +33,6 @@ const animePaginationSlice = createSlice({
       state,
       action: PayloadAction<AnimePaginationState>
     ) => {
-      console.log("setAnimePagination", action.payload);
       state.last_visible_page = action.payload.last_visible_page;
       state.has_next_page = action.payload.has_next_page;
       state.current_page = action.payload.current_page;
