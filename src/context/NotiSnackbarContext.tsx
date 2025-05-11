@@ -34,6 +34,7 @@ export const NotiSnackbarProvider = ({ children }: { children: ReactNode }) => {
         slots={{ transition: SlideTransition }}
         autoHideDuration={1200}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ pointerEvents: "none" }}
       >
         <Box
           sx={{
@@ -45,6 +46,7 @@ export const NotiSnackbarProvider = ({ children }: { children: ReactNode }) => {
             px: 3,
             py: 2,
             borderRadius: 2,
+            pointerEvents: "none",
           }}
         >
           <Typography variant="subtitle2">{message}</Typography>
