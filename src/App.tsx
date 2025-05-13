@@ -59,6 +59,15 @@ const animeTheme = createTheme({
         },
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        PopperProps: {
+          sx: {
+            pointerEvents: "none",
+          },
+        },
+      },
+    },
   },
 });
 
