@@ -91,7 +91,7 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Navigate to="/search" />} />
-            <Route path="/search/:q?" element={<SearchPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/details/:id" element={<DetailsPage />} />
             <Route path="*" element={<Navigate to="/search" />} />
           </Routes>
