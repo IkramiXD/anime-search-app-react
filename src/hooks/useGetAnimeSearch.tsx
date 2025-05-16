@@ -5,6 +5,7 @@ import {
   resetAnimePagination,
   setAnimePagination,
 } from "../features/animeList/animePaginationSlice";
+import { useAppSelector } from "./reduxHooks";
 
 export interface AnimeSearchParams {
   q: string;
@@ -32,6 +33,10 @@ const useGetAnimeSearch = (
 
   const dispatch = useDispatch();
 
+  const animePerPage = useAppSelector(
+    (state) => state.animePagination.items.per_page
+  );
+
   useEffect(() => {
     const controller = new AbortController();
     const fetchData = async () => {
@@ -40,7 +45,23 @@ const useGetAnimeSearch = (
       if (safeParams.q.trim().length === 0) {
         setResults([]);
         setIsLoading(false);
-        dispatch(resetAnimePagination());
+        if (safeParams.limit === animePerPage) {
+          dispatch(resetAnimePagination());
+        } else {
+          dispatch(
+            setAnimePagination({
+              last_visible_page: 1,
+              has_next_page: false,
+              current_page: 1,
+              items: {
+                count: 0,
+                total: 0,
+                per_page: safeParams.limit,
+              },
+            })
+          );
+        }
+
         return;
       }
 

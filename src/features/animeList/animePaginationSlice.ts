@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 //updateByComponent: useGetAnimeSearch
-//subscribeByComponent: CsutomPagination
+//subscribeByComponent: CustomPagination, useGetAnimeSearch
 
 interface AnimePaginationState {
   last_visible_page: number;
