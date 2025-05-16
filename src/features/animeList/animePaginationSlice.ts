@@ -38,7 +38,16 @@ const animePaginationSlice = createSlice({
       state.current_page = action.payload.current_page;
       state.items = action.payload.items;
     },
-    resetAnimePagination: () => initialState,
+    resetAnimePagination: (state) => {
+      const per_page = state.items.per_page;
+      return {
+        ...initialState,
+        items: {
+          ...initialState.items,
+          per_page,
+        },
+      };
+    },
   },
 });
 
