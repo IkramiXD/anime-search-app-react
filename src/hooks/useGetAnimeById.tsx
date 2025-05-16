@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 
 const useGetAnimeById = (id: number) => {
   const [results, setResults] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!id) {
       setError("Anime ID is required.");
+      setLoading(false);
       return;
     }
 
@@ -21,8 +22,13 @@ const useGetAnimeById = (id: number) => {
           `https://api.jikan.moe/v4/anime/${id}`,
           { signal: controller.signal }
         );
-        setResults(response.data.data);
-        setLoading(false);
+        if (response.data.error) {
+          setError(response.data.message);
+          setLoading(false);
+        } else {
+          setResults(response.data.data);
+          setLoading(false);
+        }
       } catch (error: any) {
         if (axios.isCancel(error)) return;
         console.error("Failed to fetch anime search results:", error);

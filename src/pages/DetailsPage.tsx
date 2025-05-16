@@ -12,6 +12,7 @@ import {
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useGlobalSnackbar } from "../context/NotiSnackbarContext";
+import InvalidAnimeId from "../components/InvalidAnimeId";
 
 const SkeletonLoader = () => (
   <Box display="flex" flexDirection="column" gap={2}>
@@ -94,7 +95,6 @@ const DetailsPage = () => {
   const dispatch = useDispatch();
   const favAnime = useAppSelector((state) => state.favoriteAnime);
   const animeId = Number(id);
-  const isLoading = loading || !results;
   const notiSnackbar = useGlobalSnackbar();
 
   const isFav = favAnime.favorites.some((fav) => fav.id === animeId);
@@ -121,10 +121,10 @@ const DetailsPage = () => {
       width="100%"
       mx="auto"
     >
-      {isLoading ? (
+      {loading ? (
         <SkeletonLoader />
       ) : error.trim().length > 0 ? (
-        <Typography color="error">{error}</Typography>
+        <InvalidAnimeId />
       ) : (
         <>
           <Box
