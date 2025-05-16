@@ -20,7 +20,7 @@ const useGetAnimeSearch = (
   }
 ) => {
   const [results, setResults] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
   const safeParams = {
@@ -36,6 +36,14 @@ const useGetAnimeSearch = (
     const controller = new AbortController();
     const fetchData = async () => {
       setIsLoading(true);
+
+      if (safeParams.q.trim().length === 0) {
+        setResults([]);
+        setIsLoading(false);
+        dispatch(resetAnimePagination());
+        return;
+      }
+
       try {
         setErrorMsg("");
         const response = await axios.get("https://api.jikan.moe/v4/anime", {
